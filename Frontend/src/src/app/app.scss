@@ -1,0 +1,26 @@
+.side-nav {
+  width: 250px;
+  height: 100vh;
+  z-index: 1000;
+}
+
+.main-content {
+  margin-left: 250px;
+  padding: 1rem;
+  min-height: calc(100vh - 3.5rem);
+}
+
+.main-footer {
+  margin-left: 250px;
+  padding: 0.75rem 0;
+}
+
+.side-nav .nav-link.active {
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.side-nav button.nav-link:hover,
+.side-nav a.nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
