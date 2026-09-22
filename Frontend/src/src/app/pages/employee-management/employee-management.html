@@ -1,1 +1,114 @@
-<p>This is {{title}}</p>
+<div class="container" style="padding: 20px; display: flex; gap: 40px;">
+
+  <div style="flex: 1; border: 1px solid #ccc; padding: 20px; border-radius: 8px;">
+    <h3>{{ currentEmployeeId() > 0 ? 'Edit Employee' : 'Add Employee' }}</h3>
+
+    <form [formGroup]="employeeForm" (ngSubmit)="upsertEmployee()">
+      <input type="hidden" formControlName="id" />
+      <div style="margin-bottom: 10px;">
+        <label>Name:</label>
+        <input type="text" formControlName="name" style="width: 100%; padding: 5px;">
+        @if (employeeForm.get('name')?.touched && employeeForm.get('name')?.invalid) {
+        <small style="color: red; display: block; margin-top: 4px;">
+          @if (employeeForm.get('name')?.hasError('required')) { Name is required. }
+          @if (employeeForm.get('name')?.hasError('minlength')) { Minimum 2 characters. }
+        </small>
+        }
+      </div>
+
+      <div style="margin-bottom: 10px;">
+        <label>Salary:</label>
+        <input type="email" formControlName="salary" style="width: 100%; padding: 5px;">
+        @if (employeeForm.get('salary')?.touched && employeeForm.get('salary')?.invalid) {
+        <small style="color: red; display: block; margin-top: 4px;">
+          @if (employeeForm.get('salary')?.hasError('required')) { Salary is required. }
+        </small>
+        }
+      </div>
+
+      <div style="margin-bottom: 10px;">
+        <label>Department:</label>
+        <div ngbDropdown class="d-inline-block" style="width: 100%;">
+          <button type="button" class="btn btn-outline-primary" ngbDropdownToggle
+            style="width: 100%; text-align: left;">
+            {{ selectedDepartment() || 'Please select a department' }}
+          </button>
+          <div ngbDropdownMenu style="width: 100%;">
+            <button type="button" ngbDropdownItem (click)="onSelect(null)">
+              Please select a department
+            </button>
+            <div class="dropdown-divider"></div>
+            @for (item of departments(); track item.id) {
+            <button type="button" ngbDropdownItem (click)="onSelect(item)">
+              {{ item.name }}
+            </button>
+            } @empty {
+            <button type="button" ngbDropdownItem disabled>Loading items...</button>
+            }
+          </div>
+        </div>
+        @if (employeeForm.get('departmentId')?.touched && employeeForm.get('departmentId')?.invalid) {
+        <small style="color: red; display: block; margin-top: 4px;">
+          Department selection is required.
+        </small>
+        }
+      </div>
+
+      <div style="margin-bottom: 15px;">
+        <label>Address:</label>
+        <input type="text" formControlName="address" style="width: 100%; padding: 5px;">
+        @if (employeeForm.get('address')?.touched && employeeForm.get('address')?.invalid) {
+        <small style="color: red; display: block; margin-top: 4px;">Address is required.</small>
+        }
+      </div>
+
+      <button type="submit" [disabled]="employeeForm.invalid"
+        style="background: green; color: white; padding: 8px 12px; border: none; cursor: pointer; opacity: {{ employeeForm.invalid ? 0.6 : 1 }}">
+        {{ currentEmployeeId() > 0 ? 'Update' : 'Save' }}
+      </button>
+
+      <button type="button" (click)="resetForm()"
+        style="background: gray; color: white; padding: 8px 12px; border: none; margin-left: 10px; cursor: pointer;">
+        Cancel
+      </button>
+    </form>
+  </div>
+
+  <div style="flex: 2;">
+    <h3>Employee Directory</h3>
+    <table border="1" cellpadding="10" cellspacing="0"
+      style="width: 100%; border-collapse: collapse; text-align: left;">
+      <thead>
+        <tr style="background-color: #f2f2f2;">
+          <th>Id</th>
+          <th>Name</th>
+          <th>Salary</th>
+          <th>Department</th>
+          <th>Address</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (emp of employees(); track emp.id) {
+        <tr>
+          <td>{{ emp.id }}</td>
+          <td>{{ emp.name }}</td>
+          <td>{{ emp.salary }}</td>
+          <td>{{ emp.department }}</td>
+          <td>{{ emp.address }}</td>
+          <td>
+            <button (click)="editEmployee(emp)"
+              style="background: blue; color: white; border: none; padding: 4px 8px; cursor: pointer; margin-right: 5px;">Edit</button>
+            <button (click)="deleteEmployee(emp.id)"
+              style="background: red; color: white; border: none; padding: 4px 8px; cursor: pointer;">Delete</button>
+          </td>
+        </tr>
+        } @empty {
+        <tr>
+          <td colspan="4" style="text-align: center;">No employees found.</td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
