@@ -15,6 +15,12 @@ namespace EmployeeCRUDAPI.Features.Employees.persistance
             builder
             .Property(e => e.Address)
             .HasMaxLength(200);
+
+            builder
+            .HasOne(e => e.Department)
+            .WithMany(e => e.Employees)
+            .HasForeignKey(e => e.DepartmentId)
+            .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

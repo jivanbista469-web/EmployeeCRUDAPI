@@ -1,4 +1,5 @@
-﻿using EmployeeCRUDAPI.Features.Employees.persistance;
+﻿using EmployeeCRUDAPI.Features.Departments.persistance;
+using EmployeeCRUDAPI.Features.Employees.persistance;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Emit;
@@ -20,5 +21,6 @@ namespace EmployeeCRUDAPI
         }
 
         public DbSet<Employee> Employees { get; set; }
+        public DbSet<Department> Departments { get; set; }
     }
 }

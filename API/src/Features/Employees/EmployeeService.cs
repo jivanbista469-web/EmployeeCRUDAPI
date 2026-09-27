@@ -30,10 +30,12 @@ namespace EmployeeCRUDAPI.Features.Employees
                 List<EmployeeResponse> employees = await _context
                                                               .Employees
                                                               .AsNoTracking()
+                                                              .Include(x => x.Department)
                                                               .Select(e => new EmployeeResponse
                                                               {
                                                                   Id = e.Id,
                                                                   Name = e.Name,
+                                                                  Department = e.Department.Name,
                                                                   Salary = e.Salary,
                                                                   Address = e.Address
                                                               })
@@ -59,6 +61,8 @@ namespace EmployeeCRUDAPI.Features.Employees
                                                       {
                                                           Id = e.Id,
                                                           Name = e.Name,
+                                                          DepartmentId = e.DepartmentId,
+                                                          Department = e.Department.Name,
                                                           Salary = e.Salary,
                                                           Address = e.Address
                                                       })
@@ -90,6 +94,7 @@ namespace EmployeeCRUDAPI.Features.Employees
                 {
                     Name = request.Name,
                     Salary = request.Salary,
+                    DepartmentId =request.DepartmentId,
                     Address = request.Address
                 };
                 await _context.Employees.AddAsync(employee);
@@ -106,7 +111,7 @@ namespace EmployeeCRUDAPI.Features.Employees
         {
             try
             {
-                ValidationResult validationResult = await _employeeCreateRequestValidator.ValidateAsync(request);
+                ValidationResult validationResult = await _employeeUpdateRequestValidator.ValidateAsync(request);
                 if (!validationResult.IsValid)
                 {
                     return OutputResponseConverter.FailedResponse(validationResult);
@@ -121,6 +126,7 @@ namespace EmployeeCRUDAPI.Features.Employees
 
                 existingEmployee.Name = request.Name;
                 existingEmployee.Salary = request.Salary;
+                existingEmployee.DepartmentId = request.DepartmentId;
                 existingEmployee.Address = request.Address;
 
                 await _context.SaveChangesAsync();

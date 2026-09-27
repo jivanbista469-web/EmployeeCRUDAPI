@@ -16,6 +16,10 @@ namespace EmployeeCRUDAPI.Features.Employees.Validators
             .GreaterThan(0)
             .WithMessage("Salary must be greater than 0.");
 
+            RuleFor(x => x.DepartmentId)
+            .NotEmpty()
+            .WithMessage("Department is required.");
+
             RuleFor(x => x.Address)
             .MaximumLength(200)
             .WithMessage("Address cannot exceed 200 characters.");

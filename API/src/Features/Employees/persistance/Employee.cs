@@ -1,4 +1,6 @@
-﻿namespace EmployeeCRUDAPI.Features.Employees.persistance
+﻿using EmployeeCRUDAPI.Features.Departments.persistance;
+
+namespace EmployeeCRUDAPI.Features.Employees.persistance
 {
     public class Employee
     {
@@ -6,5 +8,7 @@
         public string Name { get; set; }
         public decimal Salary { get; set; }
         public string Address { get; set; }
+        public int DepartmentId { get; set; }
+        public Department Department { get; set; }
     }
 }
