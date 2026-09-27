@@ -8,11 +8,24 @@ namespace EmployeeCRUDAPI
 {
     public class Program
     {
+        private const string _corsPolicy = "EmployeeManagementPolicy";
+
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy(name: _corsPolicy,
+                                  policy =>
+                                  {
+                                      policy
+                                      .WithOrigins("http://localhost:4200")
+                                      .WithHeaders("Content-Type")
+                                      .WithMethods("GET", "POST", "PUT", "DELETE");
+                                  });
+            });
 
             builder.Services.AddControllers();
 
@@ -42,8 +55,9 @@ namespace EmployeeCRUDAPI
 
             app.UseHttpsRedirection();
 
-            app.UseAuthorization();
+            app.UseCors(_corsPolicy);
 
+            app.UseAuthorization();
 
             app.MapControllers();
 

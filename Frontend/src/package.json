@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:employeecrud": "node dist/employeecrud/server/server.mjs"
+    "serve:ssr:employeecrud": "node --use-system-ca dist/employeecrud/server/server.mjs"
   },
   "private": true,
   "packageManager": "npm@11.19.1",
