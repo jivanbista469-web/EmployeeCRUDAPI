@@ -1,12 +1,12 @@
-﻿using EmployeeCRUDAPI.Features.Departments.persistance;
+﻿using EmployeeCRUDAPI.Features.Auth.Persistance;
+using EmployeeCRUDAPI.Features.Departments.persistance;
 using EmployeeCRUDAPI.Features.Employees.persistance;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Emit;
 
 namespace EmployeeCRUDAPI
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, int>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)

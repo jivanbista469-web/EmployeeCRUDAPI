@@ -1,0 +1,63 @@
+<div class="container" style="padding: 20px; display: flex; gap: 40px;">
+
+  <div style="flex: 1; border: 1px solid #ccc; padding: 20px; border-radius: 8px;">
+    <h3>{{ currentDepartmentId() > 0 ? 'Edit Department' : 'Add Department' }}</h3>
+
+    <form [formGroup]="departmentForm" (ngSubmit)="upsertDepartment()">
+      <input type="hidden" formControlName="id" />
+      <div style="margin-bottom: 10px;">
+        <label>Name:</label>
+        <input type="text" formControlName="name" style="width: 100%; padding: 5px;">
+        @if (departmentForm.get('name')?.touched && departmentForm.get('name')?.invalid) {
+        <small style="color: red; display: block; margin-top: 4px;">
+          @if (departmentForm.get('name')?.hasError('required')) { Name is required. }
+          @if (departmentForm.get('name')?.hasError('minlength')) { Minimum 2 characters. }
+        </small>
+        }
+      </div>
+
+      <button type="submit" [disabled]="departmentForm.invalid"
+        [style.opacity]="departmentForm.invalid ? 0.6 : 1"
+        style="background: green; color: white; padding: 8px 12px; border: none; cursor: pointer;">
+        {{ currentDepartmentId() > 0 ? 'Update' : 'Save' }}
+      </button>
+
+      <button type="button" (click)="resetForm()"
+        style="background: gray; color: white; padding: 8px 12px; border: none; margin-left: 10px; cursor: pointer;">
+        Cancel
+      </button>
+    </form>
+  </div>
+
+  <div style="flex: 2;">
+    <h3>Department Directory</h3>
+    <table border="1" cellpadding="10" cellspacing="0"
+      style="width: 100%; border-collapse: collapse; text-align: left;">
+      <thead>
+        <tr style="background-color: #f2f2f2;">
+          <th>Id</th>
+          <th>Name</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (dept of departments(); track dept.id) {
+        <tr>
+          <td>{{ dept.id }}</td>
+          <td>{{ dept.name }}</td>
+          <td>
+            <button (click)="editDepartment(dept)"
+              style="background: blue; color: white; border: none; padding: 4px 8px; cursor: pointer; margin-right: 5px;">Edit</button>
+            <button (click)="deleteDepartment(dept.id)"
+              style="background: red; color: white; border: none; padding: 4px 8px; cursor: pointer;">Delete</button>
+          </td>
+        </tr>
+        } @empty {
+        <tr>
+          <td colspan="4" style="text-align: center;">No departments found.</td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

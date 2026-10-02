@@ -3,8 +3,8 @@ import { EmployeeService } from './employee-service';
 import { EmployeeResponse } from './model/employee-response.model';
 import { EmployeeUpdateRequest } from './model/employee-update-request.model';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-// import { DepartmentService } from '../department-management/department-service';
-// import { DepartmentResponse } from '../department-management/model/department-response.model';
+import { DepartmentService } from '../department-management/department-service';
+import { DepartmentResponse } from '../department-management/model/department-response.model';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -18,8 +18,8 @@ export class EmployeeManagement {
   title = signal<string>('Employee Management');
   employees = signal<EmployeeResponse[]>([]);
   currentEmployeeId = signal<number>(0);
-  // departments = signal<DepartmentResponse[]>([]);
-  // selectedDepartment = signal<string | null>(null);
+  departments = signal<DepartmentResponse[]>([]);
+  selectedDepartment = signal<string | null>(null);
 
   private fb = inject(FormBuilder);
 
@@ -27,15 +27,15 @@ export class EmployeeManagement {
     id: [0],
     name: ['', [Validators.required, Validators.maxLength(100)]],
     salary: ['', [Validators.required]],
-    // departmentId: [null, Validators.required],
+    departmentId: [null, Validators.required],
     address: ['']
   });
 
-  constructor(private employeeService: EmployeeService) { }
+  constructor(private employeeService: EmployeeService, private departmentService: DepartmentService) { }
 
   ngOnInit(): void {
     this.loadEmployees();
-    // this.loadDepartments();
+    this.loadDepartments();
   }
 
   loadEmployees(): void {
@@ -46,23 +46,23 @@ export class EmployeeManagement {
     });
   }
 
-  // loadDepartments(): void {
-  //   this.departmentService.getAll().subscribe(response => {
-  //     if (response.suceeded) {
-  //       this.departments.set(response.data);
-  //     }
-  //   });
-  // }
+  loadDepartments(): void {
+    this.departmentService.getAll().subscribe(response => {
+      if (response.suceeded) {
+        this.departments.set(response.data);
+      }
+    });
+  }
 
-  // onSelect(dept: DepartmentResponse | null): void {
-  //   if (dept) {
-  //     this.selectedDepartment.set(dept.name);
-  //   } else {
-  //     this.selectedDepartment.set(null);
-  //   }
-  //   this.employeeForm.get('departmentId')?.setValue(dept ? dept.id : null);
-  //   this.employeeForm.get('departmentId')?.markAsTouched();
-  // }
+  onSelect(dept: DepartmentResponse | null): void {
+    if (dept) {
+      this.selectedDepartment.set(dept.name);
+    } else {
+      this.selectedDepartment.set(null);
+    }
+    this.employeeForm.get('departmentId')?.setValue(dept ? dept.id : null);
+    this.employeeForm.get('departmentId')?.markAsTouched();
+  }
 
   upsertEmployee(): void {
     if (this.employeeForm.invalid) {
@@ -100,11 +100,11 @@ export class EmployeeManagement {
       id: employee.id,
       name: employee.name,
       salary: employee.salary,
-      // departmentId: employee.departmentId,
+      departmentId: employee.departmentId,
       address: employee.address
     });
-    // const matchedDept = this.departments().find(d => d.id === employee.departmentId);
-    // this.selectedDepartment.set(matchedDept ? matchedDept.name : null);
+    const matchedDept = this.departments().find(d => d.id === employee.departmentId);
+    this.selectedDepartment.set(matchedDept ? matchedDept.name : null);
   }
 
   deleteEmployee(id: number): void {
@@ -119,8 +119,8 @@ export class EmployeeManagement {
   }
 
   resetForm(): void {
-    // this.employeeForm.get('departmentId')?.setValue(0);
-    // this.selectedDepartment.set(null);
+    this.employeeForm.get('departmentId')?.setValue(0);
+    this.selectedDepartment.set(null);
 
     this.employeeForm.reset();
     this.currentEmployeeId.set(0);

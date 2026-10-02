@@ -35,6 +35,7 @@ namespace EmployeeCRUDAPI.Features.Employees
                                                               {
                                                                   Id = e.Id,
                                                                   Name = e.Name,
+                                                                  DepartmentId = e.Department.Id,
                                                                   Department = e.Department.Name,
                                                                   Salary = e.Salary,
                                                                   Address = e.Address

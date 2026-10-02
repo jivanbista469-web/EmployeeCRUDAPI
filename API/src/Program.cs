@@ -1,7 +1,9 @@
 
+using EmployeeCRUDAPI.Features.Auth.Persistance;
 using EmployeeCRUDAPI.Features.Employees;
 using EmployeeCRUDAPI.Features.Employees.Validators;
 using FluentValidation;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeCRUDAPI
@@ -32,6 +34,17 @@ namespace EmployeeCRUDAPI
             AppSettings.Initialize(builder.Configuration);
 
             builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(AppSettings.ConnectionString));
+            builder.Services.AddIdentity<AppUser, AppRole>(options =>
+            {
+                options.Password.RequiredLength = 8;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireDigit = true;
+                options.Password.RequireNonAlphanumeric = true;
+                options.User.RequireUniqueEmail = true;
+            })
+           .AddEntityFrameworkStores<ApplicationDbContext>()
+           .AddDefaultTokenProviders();
             builder.Services.AddValidatorsFromAssemblyContaining<EmployeeCreateRequestValidator>();
             builder
             .Services
