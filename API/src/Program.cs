@@ -3,8 +3,11 @@ using EmployeeCRUDAPI.Features.Auth.Persistance;
 using EmployeeCRUDAPI.Features.Employees;
 using EmployeeCRUDAPI.Features.Employees.Validators;
 using FluentValidation;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace EmployeeCRUDAPI
 {
@@ -30,6 +33,31 @@ namespace EmployeeCRUDAPI
             });
 
             builder.Services.AddControllers();
+
+            // Read JWT settings from appsettings.json
+            string jwtKey = builder.Configuration["Jwt:Key"];
+            string jwtIssuer = builder.Configuration["Jwt:Issuer"];
+            string jwtAudience = builder.Configuration["Jwt:Audience"];
+
+            // Add Authentication Services
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = jwtIssuer,
+                    ValidAudience = jwtAudience,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
+                };
+            });
 
             AppSettings.Initialize(builder.Configuration);
 
@@ -70,6 +98,8 @@ namespace EmployeeCRUDAPI
 
             app.UseCors(_corsPolicy);
 
+            app.UseAuthentication();
+            
             app.UseAuthorization();
 
             app.MapControllers();
