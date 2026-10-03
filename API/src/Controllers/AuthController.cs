@@ -1,13 +1,13 @@
 ﻿using EmployeeCRUDAPI.Features.Auth;
 using EmployeeCRUDAPI.Features.Common;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EmployeeCRUDAPI.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class AuthController : ControllerBase
+    [AllowAnonymous]
+    public class AuthController : BaseController
     {
         private readonly AuthService _authService;
 

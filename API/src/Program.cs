@@ -56,6 +56,15 @@ namespace EmployeeCRUDAPI
                     ValidIssuer = jwtIssuer,
                     ValidAudience = jwtAudience,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
+                    ClockSkew = TimeSpan.Zero
+                };
+                options.Events = new JwtBearerEvents
+                {
+                    OnAuthenticationFailed = context =>
+                    {
+                        Console.WriteLine($"Auth failed: {context.Exception.Message}");
+                        return Task.CompletedTask;
+                    }
                 };
             });
 

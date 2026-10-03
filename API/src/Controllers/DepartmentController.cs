@@ -6,9 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EmployeeCRUDAPI.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class DepartmentController : ControllerBase
+    public class DepartmentController : BaseController
     {
         private readonly DepartmentService _departmentService;
 

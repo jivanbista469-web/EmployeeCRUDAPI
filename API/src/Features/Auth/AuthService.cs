@@ -12,6 +12,7 @@ namespace EmployeeCRUDAPI.Features.Auth
     {
         private readonly IConfiguration _config;
         private readonly UserManager<AppUser> _userManager;
+
         public AuthService(IConfiguration config, UserManager<AppUser> userManager)
         {
             _config = config;
