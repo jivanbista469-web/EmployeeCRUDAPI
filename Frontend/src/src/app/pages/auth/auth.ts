@@ -3,6 +3,7 @@ import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angula
 import { AuthService } from './auth-service';
 import { Router } from '@angular/router';
 import { AuthRequest } from './model/auth-request.model';
+import { AuthConstant } from '../../constants/auth-constant';
 
 @Component({
   selector: 'app-auth',

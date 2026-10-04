@@ -27,7 +27,7 @@ namespace EmployeeCRUDAPI
                                   {
                                       policy
                                       .WithOrigins("http://localhost:4200")
-                                      .WithHeaders("Content-Type")
+                                      .WithHeaders("Authorization", "Content-Type")
                                       .WithMethods("GET", "POST", "PUT", "DELETE");
                                   });
             });

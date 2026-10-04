@@ -6,6 +6,7 @@ import { OutputDataResponse } from '../../model/output-response.model';
 import { Observable } from 'rxjs';
 import { AuthResponse } from './model/auth-response.model';
 import { AuthRequest } from './model/auth-request.model';
+import { AuthConstant } from '../../constants/auth-constant';
 
 @Service()
 export class AuthService {
