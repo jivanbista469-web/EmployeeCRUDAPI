@@ -1,0 +1,22 @@
+<div class="login-container">
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <h2>Sign In</h2>
+    
+    @if (errorMessage) {
+      <div class="alert alert-danger">{{ errorMessage }}</div>
+    }
+
+    <!-- Updated Email Field to Username Field -->
+    <div class="form-group">
+      <label for="userName">userName</label>
+      <input id="userName" type="text" formControlName="userName" autocomplete="userName" />
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input id="password" type="password" formControlName="password" autocomplete="current-password" />
+    </div>
+
+    <button type="submit" [disabled]="loginForm.invalid">Login</button>
+  </form>
+</div>
