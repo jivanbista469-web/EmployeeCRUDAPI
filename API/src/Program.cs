@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Scalar.AspNetCore;
 using System.Text;
 
 namespace EmployeeCRUDAPI
@@ -93,14 +94,31 @@ namespace EmployeeCRUDAPI
 
 
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-            builder.Services.AddOpenApi();
+
+            builder.Services.AddOpenApi(options =>
+            {
+                options.AddDocumentTransformer((document, context, cancellationToken) =>
+                {
+                    document.Info = new()
+                    {
+                        Title = "Employee Management API",
+                        Version = "v1.0.0",
+                        Description = "Production-ready .NET 10 API engine powering storefront actions."
+                    };
+                    return Task.CompletedTask;
+                });
+            });
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+            app.MapOpenApi();
+
             if (app.Environment.IsDevelopment())
             {
-                app.MapOpenApi();
+                app.MapScalarApiReference();
+
+                app.MapGet("/", () => Results.Redirect("/scalar/v1"))
+                .ExcludeFromDescription();
             }
 
             app.UseHttpsRedirection();
